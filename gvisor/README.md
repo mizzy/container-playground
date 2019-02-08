@@ -1,9 +1,11 @@
 # gVisor Playground
 
-## Overview
+## Pointers
 
 - [google/gvisor: Container Runtime Sandbox](https://github.com/google/gvisor)
 - [gvisor/quick_start.md at master · google/gvisor](https://github.com/google/gvisor/blob/master/docs/user_guide/quick_start.md)
+- [minikube/README.md at master · kubernetes/minikube](https://github.com/kubernetes/minikube/blob/master/deploy/addons/gvisor/README.md)
+- [google/gvisor-containerd-shim: containerd shim for gVisor](https://github.com/google/gvisor-containerd-shim)
 
 ## Using runsc
 
