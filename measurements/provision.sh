@@ -14,7 +14,7 @@ fi
 # Install Docker
 if [ ! -x /usr/bin/docker ]; then
     apt-get remove docker docker-engine docker.io containerd runc
-    apt-get install \
+    apt-get -y install \
             apt-transport-https \
             ca-certificates \
             curl \
