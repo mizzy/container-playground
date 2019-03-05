@@ -47,6 +47,7 @@ if [ ! -x /usr/local/bin/runnc ]; then
     cd ~/go/src/github.com/nabla-containers/runnc
     make container-build
     make container-install
+    apt-get install genisoimage
 fi
 
 # Install gVisor
