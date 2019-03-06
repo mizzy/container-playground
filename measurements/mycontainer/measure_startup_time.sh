@@ -8,3 +8,8 @@ echo
 # gVisor
 echo "##### gVisor"
 time sudo runsc -log /dev/null run mycontainer
+echo
+
+# Kata Containers
+echo "##### Kata Containers"
+time sudo kata-runtime run mycontainer
