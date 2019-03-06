@@ -4,5 +4,11 @@ Vagrant.configure('2') do |config|
   config.vm.provider 'vmware_fusion' do |v, override|
     v.vmx['vhv.enable'] = 'TRUE'
   end
-  config.vm.synced_folder '.', '/vagrant'
+  config.vm.synced_folder '.', '/vagrant', type: 'rsync',
+    rsync__exclude: [
+      '.vagrant/',
+      'mycontainer/rootfs/',
+      'rumprun/',
+      'solo5/',
+    ]
 end
