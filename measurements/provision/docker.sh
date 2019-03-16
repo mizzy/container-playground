@@ -21,7 +21,21 @@ if [ ! -x /usr/bin/docker ]; then
 
     apt-get -y install docker-ce docker-ce-cli containerd.io
 
-    cp /vagrant/daemon.json /etc/docker
+    cat <<EOF > /etc/docker/daemon.json
+{
+    "runtimes": {
+        "runsc": {
+            "path": "/usr/local/bin/runsc"
+        },
+        "kata-runtime": {
+            "path": "/usr/bin/kata-runtime"
+        },
+        "runnc": {
+            "path": "/usr/local/bin/runnc"
+        }
+    }
+}
+EOF
 
     sudo systemctl daemon-reload
     sudo systemctl restart docker

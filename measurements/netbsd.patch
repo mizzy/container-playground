@@ -1,0 +1,22 @@
+From 713e2f607aad1cfffe1d814843fe7df5d1780bfc Mon Sep 17 00:00:00 2001
+From: christos <christos@NetBSD.org>
+Date: Thu, 2 Nov 2017 16:09:33 +0000
+Subject: [PATCH] Avoid negative shift.
+
+---
+ sys/lib/libunwind/AddressSpace.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sys/lib/libunwind/AddressSpace.hpp b/sys/lib/libunwind/AddressSpace.hpp
+index 2786744551ba..6539040edec6 100644
+--- a/sys/lib/libunwind/AddressSpace.hpp
++++ b/sys/lib/libunwind/AddressSpace.hpp
+@@ -140,7 +140,7 @@ class LocalAddressSpace {
+     } while (byte >= 0x80);
+     // sign extend negative numbers
+     if ((byte & 0x40) != 0)
+-      result |= (-1LL) << bit;
++      result |= (~0ULL) << bit;
+     return result;
+   }
+ 

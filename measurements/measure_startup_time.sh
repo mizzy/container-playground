@@ -13,3 +13,6 @@ echo
 # Kata Containers
 echo "##### Kata Containers"
 time sudo kata-runtime run mycontainer
+
+time sudo runnc create abcdefg123456 && sudo runnc start abcdefg123456
+

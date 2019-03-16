@@ -22,19 +22,34 @@ popd
 
 git clone https://github.com/nabla-containers/rumprun.git
 pushd rumprun
+git checkout 8b01b3
 git submodule update --init
-sudo apt install zlib1g-dev 
+pushd src-netbsd
+patch -p1 < /vagrant/netbsd.patch
+popd
+patch -p1 < /vagrant/rumprun.patch
 CC=cc ./build-rr.sh solo5 -- -F CFLAGS="-Wimplicit-fallthrough=0 -Wno-maybe-uninitialized"
-sudo cp rumprun-solo5/bin/x86_64-rumprun-netbsd-gcc /usr/local/bin
-sudo cp obj-amd64-solo5-solo5/dest.stage/bin/rumprun-bake /usr/local/bin
+CC=cc ./build-rr.sh solo5 -- -F CFLAGS="-Wimplicit-fallthrough=0"
+. obj/config-PATH.sh
+sudo cp solo5/tenders/spt/solo5-spt /usr/local/bin
 
 popd
+
+git clone https://github.com/nabla-containers/nabla-base-build
+pushd nabla-base-build
+git submodule update --init --recursive
+
+popd
+
 popd
 
 x86_64-rumprun-netbsd-gcc -o hello.out hello.c
-rumprun-bake solo5_spt hello.nabla hello.out
+rumprun-bake solo5_ukvm_seccomp hello.nabla hello.out
 
 x86_64-rumprun-netbsd-gcc -o loop.out loop.c
 rumprun-bake solo5_spt loop.nabla loop.out
+
+
+
 
 sudo docker build . -t image-for-nabla -f Dockerfile_for_nabla
