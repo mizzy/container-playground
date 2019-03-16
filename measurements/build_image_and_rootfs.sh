@@ -4,13 +4,11 @@ set -eux
 
 make all
 
-sudo docker build . -t image
-
-cid=`sudo docker create image /hello`
-mkdir -p rootfs
-sudo docker export $cid | tar -C rootfs -xvf -
-
-pushd ..
+cid=`sudo docker create busybox`
+mkdir -p bundle/rootfs
+sudo docker export $cid | tar -C bundle/rootfs -xvf -
+cp hello bundle/rootfs
+cp loop bundle/rootfs
 
 git clone https://github.com/nabla-containers/solo5.git
 pushd solo5
@@ -25,31 +23,23 @@ pushd rumprun
 git checkout 8b01b3
 git submodule update --init
 pushd src-netbsd
+# https://github.com/rumpkernel/rumprun/issues/122
 patch -p1 < /vagrant/netbsd.patch
 popd
+# https://github.com/rumpkernel/rumprun/pull/118
 patch -p1 < /vagrant/rumprun.patch
-CC=cc ./build-rr.sh solo5 -- -F CFLAGS="-Wimplicit-fallthrough=0 -Wno-maybe-uninitialized"
-CC=cc ./build-rr.sh solo5 -- -F CFLAGS="-Wimplicit-fallthrough=0"
+make
 . obj/config-PATH.sh
-sudo cp solo5/tenders/spt/solo5-spt /usr/local/bin
-
-popd
-
-git clone https://github.com/nabla-containers/nabla-base-build
-pushd nabla-base-build
-git submodule update --init --recursive
-
+pushd rumprun-solo5/bin
+patch -p1 < /vagrant/rumprun-bake.patch
 popd
 
 popd
 
 x86_64-rumprun-netbsd-gcc -o hello.out hello.c
 rumprun-bake solo5_ukvm_seccomp hello.nabla hello.out
+cp hello.nabla bundle/rootfs
 
 x86_64-rumprun-netbsd-gcc -o loop.out loop.c
-rumprun-bake solo5_spt loop.nabla loop.out
-
-
-
-
-sudo docker build . -t image-for-nabla -f Dockerfile_for_nabla
+rumprun-bake solo5_ukvm_seccomp loop.nabla loop.out
+cp loop.nabla bundle/rootfs
