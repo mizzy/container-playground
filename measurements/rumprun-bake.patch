@@ -1,0 +1,12 @@
+diff --git a/rumprun-bake b/rumprun-bake.1
+index fbde0c6..29c105b 100755
+--- a/rumprun-bake
++++ b/rumprun-bake.1
+@@ -403,6 +403,7 @@ ${runcmd} ${RUMPBAKE_BACKINGCC} ${RUMPBAKE_CFLAGS} -no-pie	\
+     --sysroot ${RUMPBAKE_TOOLDIR}/rumprun-${MACHINE_GNU_ARCH}		\
+     -specs=${RUMPBAKE_TOOLDIR}/rumprun-${MACHINE_GNU_ARCH}/lib/rumprun-${PLATFORM}/specs-bake \
+     -o ${OUTPUT} ${allobjs}						\
++    -L/usr/lib \
+     -Wl,--whole-archive ${LIBS} || exit 1
+ 
+ exit 0
