@@ -21,6 +21,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision :shell, path: 'provision/firecracker.sh'
   config.vm.provision :shell, path: 'provision/gvisor.sh'
+  config.vm.provision :shell, path: 'provision/kata.sh'
   
   config.vm.synced_folder '.', '/vagrant', #disabled: true
     type: 'rsync',
