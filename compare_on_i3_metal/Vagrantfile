@@ -1,0 +1,29 @@
+Vagrant.configure('2') do |config|
+  config.vm.box = 'dummy'
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+  config.vm.provider :aws do |aws, override|
+    aws.security_groups = ['sg-0ed58ae6c6caa8b13']
+    aws.subnet_id = 'subnet-4d542565'
+    aws.keypair_name = 'aws_mizzy'
+    override.ssh.private_key_path = '~/.ssh/aws_mizzy.pem'
+    aws.associate_public_ip = true
+    override.ssh.username = 'admin'
+    aws.ami = 'ami-0e39dfb1283d1154e'
+    aws.instance_type = 'i3.metal'
+    aws.block_device_mapping = [
+      {
+        'DeviceName' => 'xvda',
+        'Ebs.VolumeSize' => 100,
+      }
+    ]
+  end
+
+  config.vm.provision :shell, path: 'provision/firecracker.sh'
+  
+  config.vm.synced_folder '.', '/vagrant', #disabled: true
+    type: 'rsync',
+    rsync__verbose: true,
+    rsync__auto: false,
+    rsync__exclude: ['.git/']
+end
